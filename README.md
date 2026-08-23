@@ -2,7 +2,7 @@
 
 Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ years building and scaling production systems in domains that don't forgive sloppiness — retail banking, defence-grade autonomous systems, and AI-driven platforms.
 
-- Leading architecture and engineering for an AI-driven Agentic OS in the CPG industry at Asper.ai — role-based access control, global search on Typesense across 50k+ entities, a ~90% throughput improvement via a DuckDB migration.
+- Leading architecture and engineering for an AI-driven Agentic OS in the CPG industry at Asper.ai.
 - Previously: defence-grade UAV software at NewSpace Research & Technologies (gimbal and localization algorithms, edge deep-learning acceleration), and retail banking systems at Danske Bank.
 - Day to day: Python (FastAPI, Django), C# (.NET), TypeScript/React, Java (Spring Boot) — Postgres, MongoDB, Redis, ClickHouse, Elasticsearch, DuckDB, Typesense — Docker, Kubernetes, Azure — LangChain, LangGraph.
 
