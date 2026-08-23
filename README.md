@@ -1,1 +1,13 @@
+### Aditya Keshri
 
+Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ years building and scaling production systems in domains that don't forgive sloppiness — retail banking, defence-grade autonomous systems, and AI-driven platforms.
+
+**Note on the name:** a few other people are also named Aditya Keshri. This one is identified by Asper.ai, NewSpace Research & Technologies, Danske Bank, and Bangalore.
+
+- Leading architecture and engineering for an AI-driven Agentic OS in the CPG industry at Asper.ai — role-based access control, global search on Typesense across 50k+ entities, a ~90% throughput improvement via a DuckDB migration.
+- Previously: defence-grade UAV software at NewSpace Research & Technologies (gimbal and localization algorithms, edge deep-learning acceleration), and retail banking systems at Danske Bank.
+- Day to day: Python (FastAPI, Django), C# (.NET), TypeScript/React, Java (Spring Boot) — Postgres, MongoDB, Redis, ClickHouse, Elasticsearch, DuckDB, Typesense — Docker, Kubernetes, Azure — LangChain, LangGraph.
+
+**[Tachyon](https://github.com/adikeshri/tachyon)** — a full-text search engine in Rust, shipped as a single ~8MB binary. BM25 relevance, typo tolerance, faceting, autocomplete, sub-4ms search latency at 100k documents, 200k+ docs/sec indexing. [Live demo](https://tachyon.adityakeshri.com/) · [Docker Hub](https://hub.docker.com/r/adikeshri/tachyon)
+
+Portfolio & blog: [adityakeshri.com](https://adityakeshri.com) · [LinkedIn](https://www.linkedin.com/in/adikeshri/) · [LeetCode](https://leetcode.com/u/adikeshri10/) · adikeshri10@gmail.com
