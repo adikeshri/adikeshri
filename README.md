@@ -7,6 +7,6 @@ Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ yea
 - Day to day: Python (FastAPI, Django), C# (.NET), TypeScript/React, Java (Spring Boot) — Postgres, MongoDB, Redis, ClickHouse, Elasticsearch, DuckDB, Typesense — Docker, Kubernetes, Azure — LangChain, LangGraph.
 
 **Currently working on:**
-1. **[Tachyon](https://github.com/adikeshri/tachyon)** — a full-text search engine in Rust, shipped as a single ~8MB binary. BM25 relevance, typo tolerance, faceting, autocomplete, sub-4ms search latency at 100k documents, 200k+ docs/sec indexing. [Live demo](https://tachyon.adityakeshri.com/) · [Docker Hub](https://hub.docker.com/r/adikeshri/tachyon)
+1. **[Tachyon](https://github.com/adikeshri/tachyon)** — a full-text search engine in Rust, shipped as a single ~8MB binary. [Live demo](https://tachyon.adityakeshri.com/) · [Docker Hub](https://hub.docker.com/r/adikeshri/tachyon)
 
 Portfolio & blog: [adityakeshri.com](https://adityakeshri.com) · [LinkedIn](https://www.linkedin.com/in/adikeshri/) · [LeetCode](https://leetcode.com/u/adikeshri10/)
