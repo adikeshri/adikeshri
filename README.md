@@ -1,6 +1,6 @@
 ### Aditya Keshri
 
-Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ years building and scaling production systems in domains that don't forgive sloppiness — retail banking, defence-grade autonomous systems, and AI-driven platforms.
+Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ years building and scaling production systems in domains that don't forgive sloppiness - retail investment banking, defence-grade autonomous systems, and AI-driven platforms.
 
 - Leading architecture and engineering for an AI-driven Agentic OS in the CPG industry at Asper.ai.
 - Previously: defence-grade UAV software at NewSpace Research & Technologies (gimbal and localization algorithms, edge deep-learning acceleration), and retail investment banking systems at Danske Bank.
