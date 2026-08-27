@@ -10,3 +10,5 @@ Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ yea
 2. **[Valyria](https://github.com/adikeshri/valyria)** — a local-first, offline coding agent runtime in Rust.
 
 Portfolio & blog: [adityakeshri.com](https://adityakeshri.com) · [LinkedIn](https://www.linkedin.com/in/adikeshri/) · [LeetCode](https://leetcode.com/u/adikeshri10/)
+
+Let's talk?
