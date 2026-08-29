@@ -11,7 +11,7 @@ Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ yea
 
 **Languages across my GitHub:**
 
-[![Top languages](https://github-readme-stats-git-master-rickstaa.vercel.app/api/top-langs/?username=adikeshri&layout=compact&langs_count=10&hide=html,css&card_width=850)](https://github.com/adikeshri)
+[![Top languages](https://github-readme-stats-git-master-rickstaa.vercel.app/api/top-langs/?username=adikeshri&layout=compact&langs_count=10&hide=html,css)](https://github.com/adikeshri)
 
 Portfolio & blog: [adityakeshri.com](https://adityakeshri.com) · [LinkedIn](https://www.linkedin.com/in/adikeshri/) · [LeetCode](https://leetcode.com/u/adikeshri10/)
 
