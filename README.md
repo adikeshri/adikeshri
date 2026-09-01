@@ -11,4 +11,4 @@ Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India. 6+ yea
 
 Portfolio & blog: [adityakeshri.com](https://adityakeshri.com) · [LinkedIn](https://www.linkedin.com/in/adikeshri/) · [LeetCode](https://leetcode.com/u/adikeshri10/)
 
-Let's talk?
+Let's talk? Drop me a mail
