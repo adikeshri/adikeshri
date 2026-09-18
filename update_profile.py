@@ -171,6 +171,15 @@ def tile(x, y, w, h, value, label, p, accent=None):
     return "".join(out)
 
 
+def loc_tile(x, y, w, h, added, removed, p):
+    out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{p["tile"]}" stroke="{p["border"]}"/>']
+    cx = x + w / 2
+    out.append(text(cx, y + h * 0.32, f"+{fmt(added)}", p["ok"], size=12.5, anchor="middle", weight="700"))
+    out.append(text(cx, y + h * 0.58, f"-{fmt(removed)}", p["bad"], size=12.5, anchor="middle", weight="700"))
+    out.append(text(cx, y + h * 0.85, "LOC", p["dim"], size=9.5, anchor="middle", weight="600"))
+    return "".join(out)
+
+
 def render(mode, s):
     p = PALETTES[mode]
     y, m, d = years_months_days(BORN, date.today())
@@ -230,19 +239,19 @@ def render(mode, s):
     out.append(f'<line x1="30" y1="{body_end}" x2="{CARD_W - 30}" y2="{body_end}" stroke="{p["border"]}"/>')
 
     tiles = [
-        ("REPOS", s["repos"], None),
-        ("STARS", s["stars"], None),
-        ("COMMITS", s["commits"], None),
-        ("FOLLOWERS", s["followers"], None),
-        ("CONTRIBUTED TO", s["contributed"], None),
-        ("LOC (NET)", s["loc"], p["ok"] if isinstance(s["loc"], int) and s["loc"] >= 0 else p["bad"]),
+        ("REPOS", s["repos"]),
+        ("STARS", s["stars"]),
+        ("COMMITS", s["commits"]),
+        ("FOLLOWERS", s["followers"]),
+        ("CONTRIBUTED TO", s["contributed"]),
     ]
     tw, gap = 104, 12
     tx = col1
     ty = body_end + 16
-    for label, value, accent in tiles:
-        out.append(tile(tx, ty, tw, 64, value, label, p, accent))
+    for label, value in tiles:
+        out.append(tile(tx, ty, tw, 64, value, label, p))
         tx += tw + gap
+    out.append(loc_tile(tx, ty, tw, 64, s["loc_add"], s["loc_del"], p))
 
     out.append("</svg>")
     return "\n".join(out)
