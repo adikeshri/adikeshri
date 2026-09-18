@@ -207,17 +207,23 @@ def render(mode, s):
         out.append(row(col1, yy2 + 24 + i * 20, k, v, p, mid))
     left_end = yy2 + 24 + len(rows2) * 20
 
+    out.append(section(col2, top, "BUILDING", 40, p))
+    rows3 = [
+        ("TACHYON", "Full-text search in Rust, ~8MB"),
+        ("VALYRIA", "Offline coding agent runtime"),
+    ]
+    for i, (k, v) in enumerate(rows3):
+        out.append(row(col2, top + 24 + i * 20, k, v, p, edge))
+    yy3 = top + 24 + len(rows3) * 20 + 14
+    out.append(section(col2, yy3, "CONTACT", 40, p))
     rows4 = [
         ("EMAIL", "adikeshri10@gmail.com"),
         ("LINKEDIN", "in/adikeshri"),
         ("SITE", "adityakeshri.com"),
     ]
-    right_h = 24 + len(rows4) * 20
-    right_top = top + max((left_end - top) - right_h, 0) // 2
-    out.append(section(col2, right_top, "CONTACT", 40, p))
     for i, (k, v) in enumerate(rows4):
-        out.append(row(col2, right_top + 24 + i * 20, k, v, p, edge))
-    right_end = right_top + right_h
+        out.append(row(col2, yy3 + 24 + i * 20, k, v, p, edge))
+    right_end = yy3 + 24 + len(rows4) * 20
 
     body_end = max(left_end, right_end) + 16
     out.append(f'<line x1="30" y1="{body_end}" x2="{CARD_W - 30}" y2="{body_end}" stroke="{p["border"]}"/>')
