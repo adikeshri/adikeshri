@@ -66,14 +66,24 @@ def years_months_days(start, end):
     return years, months, days
 
 
-def commit_totals():
+def contribution_totals():
+    # One contributionsCollection per year (GitHub caps each window at a year),
+    # aliased so they all come back in a single request.
     aliases = "\n".join(
-        f'y{yr}: contributionsCollection(from: "{yr}-01-01T00:00:00Z", to: "{yr + 1}-01-01T00:00:00Z") '
-        "{ totalCommitContributions restrictedContributionsCount }"
+        f'y{yr}: contributionsCollection(from: "{yr}-01-01T00:00:00Z", to: "{yr + 1}-01-01T00:00:00Z") {{ '
+        "totalCommitContributions totalIssueContributions totalPullRequestContributions "
+        "totalPullRequestReviewContributions restrictedContributionsCount }"
         for yr in range(FIRST_YEAR, datetime.now(timezone.utc).year + 1)
     )
     data = gql(f'query {{ user(login: "{USER}") {{ {aliases} }} }}')["user"]
-    return sum(v["totalCommitContributions"] + v["restrictedContributionsCount"] for v in data.values())
+    commits = sum(v["totalCommitContributions"] + v["restrictedContributionsCount"] for v in data.values())
+    contributions = sum(
+        v["totalCommitContributions"] + v["totalIssueContributions"]
+        + v["totalPullRequestContributions"] + v["totalPullRequestReviewContributions"]
+        + v["restrictedContributionsCount"]
+        for v in data.values()
+    )
+    return commits, contributions
 
 
 LOC_QUERY = """
@@ -131,12 +141,14 @@ def fetch_stats():
     own_repos = [(USER, n["name"]) for n in u["repositories"]["nodes"] if not n["isFork"]]
     org_repos = [(n["owner"]["login"], n["name"]) for n in u["repositoriesContributedTo"]["nodes"]]
     added, removed = loc_totals(own_repos + org_repos, u["id"])
+    commits, contributions = contribution_totals()
     return {
         "repos": u["repositories"]["totalCount"],
         "stars": sum(n["stargazerCount"] for n in u["repositories"]["nodes"]),
         "followers": u["followers"]["totalCount"],
         "contributed": u["repositoriesContributedTo"]["totalCount"],
-        "commits": commit_totals(),
+        "commits": commits,
+        "contributions": contributions,
         "loc_add": added,
         "loc_del": removed,
         "loc": added - removed,
@@ -247,10 +259,11 @@ def render(mode, s):
         ("REPOS", s["repos"]),
         ("STARS", s["stars"]),
         ("COMMITS", s["commits"]),
+        ("CONTRIBUTIONS", s["contributions"]),
         ("FOLLOWERS", s["followers"]),
         ("CONTRIBUTED TO", s["contributed"]),
     ]
-    tw, gap = 104, 12
+    tw, gap = 94, 9
     tx = col1
     ty = body_end + 16
     for label, value in tiles:
