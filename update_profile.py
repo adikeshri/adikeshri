@@ -188,46 +188,36 @@ def render(mode, s):
     out.append(f'<line x1="30" y1="78" x2="{CARD_W - 30}" y2="78" stroke="{p["border"]}"/>')
 
     col1, mid, col2, edge = 34, 382, 404, CARD_W - 30
-    yy = 104
-    out.append(section(col1, yy, "ABOUT", 40, p))
+    top = 104
+    out.append(section(col1, top, "ABOUT", 40, p))
     rows1 = [
         ("ROLE", "Lead Software Engineer"),
         ("COMPANY", "Asper.ai · Bangalore, India"),
-        ("EXPERIENCE", "6+ yrs — UAVs, banking, now AI"),
         ("AGE", f"{y}y {m}m {d}d"),
     ]
     for i, (k, v) in enumerate(rows1):
-        out.append(row(col1, yy + 24 + i * 20, k, v, p, mid))
-    yy2 = yy + 24 + len(rows1) * 20 + 14
+        out.append(row(col1, top + 24 + i * 20, k, v, p, mid))
+    yy2 = top + 24 + len(rows1) * 20 + 14
     out.append(section(col1, yy2, "STACK", 40, p))
     rows2 = [
         ("LANGUAGES", "Python, C#, Java, JS/TS, Rust"),
         ("SPOKEN", "English, Hindi"),
-        ("INTERESTS", "Fitness, Music, Cricket"),
     ]
     for i, (k, v) in enumerate(rows2):
         out.append(row(col1, yy2 + 24 + i * 20, k, v, p, mid))
     left_end = yy2 + 24 + len(rows2) * 20
 
-    yy = 104
-    out.append(section(col2, yy, "BUILDING", 40, p))
-    rows3 = [
-        ("TACHYON", "Full-text search in Rust, ~8MB"),
-        ("VALYRIA", "Offline coding agent runtime"),
-    ]
-    for i, (k, v) in enumerate(rows3):
-        out.append(row(col2, yy + 24 + i * 20, k, v, p, edge))
-    yy2 = yy + 24 + len(rows3) * 20 + 14
-    out.append(section(col2, yy2, "CONTACT", 40, p))
     rows4 = [
         ("EMAIL", "adikeshri10@gmail.com"),
         ("LINKEDIN", "in/adikeshri"),
         ("SITE", "adityakeshri.com"),
-        ("LEETCODE", "adikeshri10"),
     ]
+    right_h = 24 + len(rows4) * 20
+    right_top = top + max((left_end - top) - right_h, 0) // 2
+    out.append(section(col2, right_top, "CONTACT", 40, p))
     for i, (k, v) in enumerate(rows4):
-        out.append(row(col2, yy2 + 24 + i * 20, k, v, p, edge))
-    right_end = yy2 + 24 + len(rows4) * 20
+        out.append(row(col2, right_top + 24 + i * 20, k, v, p, edge))
+    right_end = right_top + right_h
 
     body_end = max(left_end, right_end) + 16
     out.append(f'<line x1="30" y1="{body_end}" x2="{CARD_W - 30}" y2="{body_end}" stroke="{p["border"]}"/>')
