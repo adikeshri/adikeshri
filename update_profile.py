@@ -211,9 +211,9 @@ def tile(x, y, w, h, value, label, p, accent=None):
 def loc_tile(x, y, w, h, added, removed, p):
     out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{p["tile"]}" stroke="{p["border"]}"/>']
     cx = x + w / 2
-    out.append(text(cx, y + h * 0.32, f"+{fmt(added)}", p["ok"], size=12.5, anchor="middle", weight="700"))
-    out.append(text(cx, y + h * 0.58, f"-{fmt(removed)}", p["bad"], size=12.5, anchor="middle", weight="700"))
-    out.append(text(cx, y + h * 0.85, "LOC", p["dim"], size=9.5, anchor="middle", weight="600"))
+    out.append(text(cx, y + h * 0.32, f"{fmt(added)}++", p["ok"], size=12, anchor="middle", weight="700"))
+    out.append(text(cx, y + h * 0.58, f"{fmt(removed)}--", p["bad"], size=12, anchor="middle", weight="700"))
+    out.append(text(cx, y + h * 0.85, "LINES OF CODE", p["dim"], size=8.5, anchor="middle", weight="600"))
     return "".join(out)
 
 
@@ -291,9 +291,8 @@ def render(mode, s):
         ("COMMITS", s["commits"]),
         ("CONTRIBUTIONS", s["contributions"]),
         ("FOLLOWERS", s["followers"]),
-        ("CONTRIBUTED TO", s["contributed"]),
     ]
-    tw, gap = 104, 12
+    tw, gap = 122, 14
     tx, ty = margin, footer_y + 14
     for label, value in tiles:
         out.append(tile(tx, ty, tw, 64, value, label, p))
