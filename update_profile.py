@@ -13,37 +13,25 @@ from datetime import date, datetime, timezone
 USER = "adikeshri"
 BORN = date(1998, 6, 26)
 FIRST_YEAR = 2017  # account creation year, used to bound the contribution scan
-CARD_W, CARD_H = 860, 570
-TITLE = "aditya@keshri:~/profile"
+CARD_W, CARD_H = 780, 440
 
 TOKEN = os.environ.get("ACCESS_TOKEN") or os.environ.get("GITHUB_TOKEN") or ""
 
-# a big block "A" instead of a stock neofetch mascot — mostly plain ASCII
-# (no box-drawing glyphs) so it can't get mangled by an unexpected charset.
-ART = [
-    r"        /\        ",
-    r"       /  \       ",
-    r"      / /\ \      ",
-    r"     / /  \ \     ",
-    r"    / /----\ \    ",
-    r"   / /      \ \   ",
-    r"  /_/        \_\  ",
-    r"                   ",
-    r"    A . KESHRI     ",
+MARK = [
+    " ╭───╮",
+    "│     │",
+    " ╰──┬╯",
+    "    ╰─",
 ]
-
-TRAFFIC_LIGHTS = ["#ff5f56", "#ffbd2e", "#27c93f"]
 
 PALETTES = {
     "dark": {
-        "bg": "#0a0e16", "border": "#232a3d", "chrome": "#0d1220", "art": "#a78bfa",
-        "prompt": "#a78bfa", "comment": "#5fa88a", "name": "#f8fafc",
+        "bg": "#0b0f19", "border": "#232a3d", "head": "#a78bfa", "name": "#f8fafc",
         "label": "#2dd4bf", "val": "#cbd5e1", "dim": "#3f4863", "tile": "#131a2a",
         "ok": "#4ade80", "bad": "#f87171",
     },
     "light": {
-        "bg": "#ffffff", "border": "#e2e8f0", "chrome": "#f6f8fa", "art": "#7c3aed",
-        "prompt": "#7c3aed", "comment": "#3f7d5e", "name": "#0f172a",
+        "bg": "#ffffff", "border": "#e2e8f0", "head": "#7c3aed", "name": "#0f172a",
         "label": "#0f766e", "val": "#334155", "dim": "#cbd5e1", "tile": "#f8fafc",
         "ok": "#15803d", "bad": "#b91c1c",
     },
@@ -176,29 +164,21 @@ def text(x, y, s, fill, size=13, anchor="start", weight="400"):
             f'text-anchor="{anchor}" font-weight="{weight}" xml:space="preserve">{html.escape(s)}</text>')
 
 
-def fit_chars(s, max_chars):
+def fit(s, max_px, size=12.5, char_w=0.62):
+    max_chars = max(int(max_px / (size * char_w)), 1)
     return s if len(s) <= max_chars else s[: max_chars - 1].rstrip() + "…"
 
 
-def spans(x, y, parts, size=13):
-    # parts: (text, fill, font-weight) tuples rendered as one monospace line,
-    # so a dot-leader's column math only has to count characters.
-    body = "".join(f'<tspan fill="{fill}" font-weight="{w}">{html.escape(t)}</tspan>' for t, fill, w in parts)
-    return f'<text x="{x}" y="{y}" font-size="{size}" xml:space="preserve">{body}</text>'
+def row(x, y, label, value, p, col_right, label_w=112):
+    v = fit(fmt(value), col_right - (x + label_w))
+    return (text(x, y, label, p["label"], size=11.5, weight="600")
+            + text(x + label_w, y, v, p["val"], size=12.5))
 
 
-def comment(x, y, title, p):
-    return spans(x, y, [(f"# {title}", p["comment"], "600")], size=12.5)
-
-
-def kv(x, y, key, value, width, p):
-    value = fit_chars(fmt(value), max(width - len(key) - 4, 4))
-    dots = "." * max(width - len(key) - len(value) - 3, 1)
-    return spans(x, y, [
-        (f"{key} ", p["label"], "600"),
-        (dots + " ", p["dim"], "400"),
-        (value, p["val"], "400"),
-    ])
+def section(x, y, title, width_chars, p):
+    dash = "─" * max(width_chars - len(title) - 1, 1)
+    return (text(x, y, title, p["head"], size=11.5, weight="700")
+            + text(x + len(title) * 7.6 + 8, y, dash, p["dim"], size=11.5))
 
 
 def tile(x, y, w, h, value, label, p, accent=None):
@@ -228,62 +208,52 @@ def render(mode, s):
         f'fill="{p["bg"]}" stroke="{p["border"]}"/>',
     ]
 
-    # title bar chrome
-    out.append(f'<rect x="0.5" y="0.5" width="{CARD_W - 1}" height="30" rx="12" fill="{p["chrome"]}"/>')
-    out.append(f'<rect x="0.5" y="18.5" width="{CARD_W - 1}" height="12" fill="{p["chrome"]}"/>')
-    for i, color in enumerate(TRAFFIC_LIGHTS):
-        out.append(f'<circle cx="{22 + i * 18}" cy="15" r="6" fill="{color}"/>')
-    out.append(text(CARD_W / 2, 19.5, TITLE, p["dim"], size=12, anchor="middle"))
-    out.append(f'<line x1="0" y1="31" x2="{CARD_W}" y2="31" stroke="{p["border"]}"/>')
+    for i, line in enumerate(MARK):
+        out.append(text(30, 30 + i * 13, line, p["head"], size=12.5))
+    out.append(text(96, 40, "Aditya Keshri", p["name"], size=18, weight="700"))
+    out.append(text(96, 60, "Lead Software Engineer, building agentic systems", p["val"], size=12))
+    out.append(f'<line x1="30" y1="78" x2="{CARD_W - 30}" y2="78" stroke="{p["border"]}"/>')
 
-    margin, cy = 28, 56
-    out.append(spans(margin, cy, [("$ ", p["prompt"], "700"), ("whoami", p["name"], "400")]))
-    cy += 20
-    out.append(text(margin + 14, cy, "Aditya Keshri — Lead Software Engineer, building agentic systems", p["val"], size=12.5))
-    cy += 18
-    out.append(f'<line x1="{margin}" y1="{cy}" x2="{CARD_W - margin}" y2="{cy}" stroke="{p["border"]}"/>')
-
-    body_top = cy + 30
-    art_x = margin
-    for i, line in enumerate(ART):
-        out.append(text(art_x, body_top + i * 16, line, p["art"], size=13, weight="600"))
-
-    info_x, info_edge = art_x + 220, CARD_W - margin
-    info_w = int((info_edge - info_x) / 7.6)  # ~character budget at 13px monospace
-    cy = body_top
-    sections = [
-        ("about", [
-            ("ROLE", "Lead Software Engineer"),
-            ("COMPANY", "Asper.ai · Bangalore, India"),
-            ("AGE", f"{y}y {m}m {d}d"),
-        ]),
-        ("stack", [
-            ("LANGUAGES", "Python, C#, Java, JavaScript/TypeScript, Rust"),
-            ("SPOKEN", "English, Hindi"),
-        ]),
-        ("building", [
-            ("TACHYON", "a full-text search engine in Rust, ~8MB binary"),
-            ("VALYRIA", "a local-first, offline coding agent runtime"),
-        ]),
-        ("contact", [
-            ("EMAIL", "adikeshri10@gmail.com"),
-            ("LINKEDIN", "in/adikeshri"),
-            ("SITE", "adityakeshri.com"),
-        ]),
+    col1, mid, col2, edge = 34, 382, 404, CARD_W - 30
+    top = 104
+    out.append(section(col1, top, "ABOUT", 40, p))
+    rows1 = [
+        ("ROLE", "Lead Software Engineer"),
+        ("COMPANY", "Asper.ai · Bangalore, India"),
+        ("AGE", f"{y}y {m}m {d}d"),
     ]
-    for title, rows in sections:
-        out.append(comment(info_x, cy, title, p))
-        cy += 20
-        for k, v in rows:
-            out.append(kv(info_x, cy, k, v, info_w, p))
-            cy += 20
-        cy += 10
-    body_end = max(cy - 10, body_top + len(ART) * 16)
+    for i, (k, v) in enumerate(rows1):
+        out.append(row(col1, top + 24 + i * 20, k, v, p, mid))
+    yy2 = top + 24 + len(rows1) * 20 + 14
+    out.append(section(col1, yy2, "STACK", 40, p))
+    rows2 = [
+        ("LANGUAGES", "Python, C#, Java, JS/TS, Rust"),
+        ("SPOKEN", "English, Hindi"),
+    ]
+    for i, (k, v) in enumerate(rows2):
+        out.append(row(col1, yy2 + 24 + i * 20, k, v, p, mid))
+    left_end = yy2 + 24 + len(rows2) * 20
 
-    footer_y = body_end + 14
-    out.append(f'<line x1="{margin}" y1="{footer_y}" x2="{CARD_W - margin}" y2="{footer_y}" stroke="{p["border"]}"/>')
-    footer_y += 24
-    out.append(spans(margin, footer_y, [("$ ", p["prompt"], "700"), ("gh stats --live", p["name"], "400")]))
+    out.append(section(col2, top, "BUILDING", 40, p))
+    rows3 = [
+        ("TACHYON", "Full-text search in Rust, ~8MB"),
+        ("VALYRIA", "Offline coding agent runtime"),
+    ]
+    for i, (k, v) in enumerate(rows3):
+        out.append(row(col2, top + 24 + i * 20, k, v, p, edge))
+    yy3 = top + 24 + len(rows3) * 20 + 14
+    out.append(section(col2, yy3, "CONTACT", 40, p))
+    rows4 = [
+        ("EMAIL", "adikeshri10@gmail.com"),
+        ("LINKEDIN", "in/adikeshri"),
+        ("SITE", "adityakeshri.com"),
+    ]
+    for i, (k, v) in enumerate(rows4):
+        out.append(row(col2, yy3 + 24 + i * 20, k, v, p, edge))
+    right_end = yy3 + 24 + len(rows4) * 20
+
+    body_end = max(left_end, right_end) + 16
+    out.append(f'<line x1="30" y1="{body_end}" x2="{CARD_W - 30}" y2="{body_end}" stroke="{p["border"]}"/>')
 
     tiles = [
         ("REPOS", s["repos"]),
@@ -292,8 +262,9 @@ def render(mode, s):
         ("CONTRIBUTIONS", s["contributions"]),
         ("FOLLOWERS", s["followers"]),
     ]
-    tw, gap = 122, 14
-    tx, ty = margin, footer_y + 14
+    tw, gap = 108, 12
+    tx = col1
+    ty = body_end + 16
     for label, value in tiles:
         out.append(tile(tx, ty, tw, 64, value, label, p))
         tx += tw + gap
