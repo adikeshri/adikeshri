@@ -77,8 +77,8 @@ def commit_totals():
 
 
 LOC_QUERY = """
-query($name: String!, $id: ID!, $cursor: String) {
-  repository(owner: "%s", name: $name) {
+query($owner: String!, $name: String!, $id: ID!, $cursor: String) {
+  repository(owner: $owner, name: $name) {
     defaultBranchRef { target { ... on Commit {
       history(first: 100, author: { id: $id }, after: $cursor) {
         pageInfo { hasNextPage endCursor }
@@ -86,16 +86,19 @@ query($name: String!, $id: ID!, $cursor: String) {
       }
     } } }
   }
-}""" % USER
+}"""
 
 
-def loc_totals(repo_names, user_id):
+def loc_totals(repos, user_id):
+    # repos: iterable of (owner, name) — own repos plus repos contributed to
+    # under other accounts/orgs, so a PR merged into someone else's project
+    # counts toward LOC the same way an own-repo commit does.
     added = removed = 0
-    for name in repo_names:
+    for owner, name in repos:
         cursor = None
         try:
             while True:
-                ref = gql(LOC_QUERY, {"name": name, "id": user_id, "cursor": cursor})["repository"]["defaultBranchRef"]
+                ref = gql(LOC_QUERY, {"owner": owner, "name": name, "id": user_id, "cursor": cursor})["repository"]["defaultBranchRef"]
                 if ref is None:
                     break
                 hist = ref["target"]["history"]
@@ -105,7 +108,7 @@ def loc_totals(repo_names, user_id):
                     break
                 cursor = hist["pageInfo"]["endCursor"]
         except Exception as exc:
-            print(f"loc({name}) skipped: {exc}")
+            print(f"loc({owner}/{name}) skipped: {exc}")
     return added, removed
 
 
@@ -119,13 +122,15 @@ def fetch_stats():
           totalCount
           nodes {{ name stargazerCount isFork }}
         }}
-        repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, PULL_REQUEST, REPOSITORY]) {{
+        repositoriesContributedTo(first: 100, contributionTypes: [COMMIT, PULL_REQUEST, REPOSITORY]) {{
           totalCount
+          nodes {{ name owner {{ login }} }}
         }}
       }}
     }}""")["user"]
-    own_repos = [n["name"] for n in u["repositories"]["nodes"] if not n["isFork"]]
-    added, removed = loc_totals(own_repos, u["id"])
+    own_repos = [(USER, n["name"]) for n in u["repositories"]["nodes"] if not n["isFork"]]
+    org_repos = [(n["owner"]["login"], n["name"]) for n in u["repositoriesContributedTo"]["nodes"]]
+    added, removed = loc_totals(own_repos + org_repos, u["id"])
     return {
         "repos": u["repositories"]["totalCount"],
         "stars": sum(n["stargazerCount"] for n in u["repositories"]["nodes"]),
