@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="profile-card-dark.svg?v=1789769528">
-  <source media="(prefers-color-scheme: light)" srcset="profile-card-light.svg?v=1789769528">
-  <img alt="Aditya Keshri's GitHub profile" src="profile-card-dark.svg?v=1789769528">
+  <source media="(prefers-color-scheme: dark)" srcset="profile-card-dark.svg?v=1789769678">
+  <source media="(prefers-color-scheme: light)" srcset="profile-card-light.svg?v=1789769678">
+  <img alt="Aditya Keshri's GitHub profile" src="profile-card-dark.svg?v=1789769678">
 </picture>
 
 **Currently building:**
