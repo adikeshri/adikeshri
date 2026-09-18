@@ -6,6 +6,7 @@ import calendar
 import json
 import html
 import os
+import re
 import urllib.request
 from datetime import date, datetime, timezone
 
@@ -252,6 +253,18 @@ def selfcheck():
     assert years_months_days(date(1998, 6, 26), date(2026, 6, 25)) == (27, 11, 30)
 
 
+def bust_readme_cache():
+    # GitHub's CDN and browsers cache profile-card-*.svg by URL, so a same-name
+    # overwrite can serve a stale image until this query param changes.
+    stamp = int(datetime.now(timezone.utc).timestamp())
+    with open("README.md", encoding="utf-8") as f:
+        readme = f.read()
+    updated = re.sub(r"(profile-card-(?:dark|light)\.svg)\?v=\d+", rf"\1?v={stamp}", readme)
+    if updated != readme:
+        with open("README.md", "w", encoding="utf-8") as f:
+            f.write(updated)
+
+
 if __name__ == "__main__":
     selfcheck()
     stats = fetch_stats()
@@ -259,4 +272,5 @@ if __name__ == "__main__":
     for mode in PALETTES:
         with open(f"profile-card-{mode}.svg", "w", encoding="utf-8") as f:
             f.write(render(mode, stats))
-    print("wrote profile-card-dark.svg, profile-card-light.svg")
+    bust_readme_cache()
+    print("wrote profile-card-dark.svg, profile-card-light.svg, bumped README cache-bust")
