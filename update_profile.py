@@ -211,7 +211,7 @@ def render(mode, s):
     for i, line in enumerate(MARK):
         out.append(text(30, 30 + i * 13, line, p["head"], size=12.5))
     out.append(text(96, 40, "Aditya Keshri", p["name"], size=18, weight="700"))
-    out.append(text(96, 60, "Lead Software Engineer, building agentic systems", p["val"], size=12))
+    out.append(text(96, 60, "Lead Software Engineer", p["val"], size=12))
     out.append(f'<line x1="30" y1="78" x2="{CARD_W - 30}" y2="78" stroke="{p["border"]}"/>')
 
     col1, mid, col2, edge = 34, 382, 404, CARD_W - 30

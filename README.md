@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="profile-card-dark.svg?v=1789776045">
-  <source media="(prefers-color-scheme: light)" srcset="profile-card-light.svg?v=1789776045">
-  <img alt="Aditya Keshri's GitHub profile" src="profile-card-dark.svg?v=1789776045">
+  <source media="(prefers-color-scheme: dark)" srcset="profile-card-dark.svg?v=1789776493">
+  <source media="(prefers-color-scheme: light)" srcset="profile-card-light.svg?v=1789776493">
+  <img alt="Aditya Keshri's GitHub profile" src="profile-card-dark.svg?v=1789776493">
 </picture>
 
 Lead Software Engineer at [Asper.ai](https://asper.ai), Bangalore, India.
